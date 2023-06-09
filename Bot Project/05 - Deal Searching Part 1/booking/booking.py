@@ -1,7 +1,7 @@
 import booking.constants as const
 import os
 from selenium import webdriver
-
+from selenium.webdriver.common.by import By
 
 class Booking(webdriver.Chrome):
     def __init__(self, driver_path=r"C:\SeleniumDrivers",
@@ -11,7 +11,7 @@ class Booking(webdriver.Chrome):
         os.environ['PATH'] += self.driver_path
         super(Booking, self).__init__()
         self.implicitly_wait(15)
-        self.maximize_window()
+        #self.maximize_window()
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         if self.teardown:
@@ -21,14 +21,10 @@ class Booking(webdriver.Chrome):
         self.get(const.BASE_URL)
 
     def change_currency(self, currency=None):
-        currency_element = self.find_element_by_css_selector(
-            'button[data-tooltip-text="Choose your currency"]'
-        )
+        currency_element = self.find_element(By.CSS_SELECTOR,'button[data-testid="header-currency-picker-trigger"]')    
         currency_element.click()
 
-        selected_currency_element = self.find_element_by_css_selector(
-            f'a[data-modal-header-async-url-param*="selected_currency={currency}"]'
-        )
+        selected_currency_element = self.find_element(By.CSS_SELECTOR,'div > span[text="AUD"]')
         selected_currency_element.click()
 
 
