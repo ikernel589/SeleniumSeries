@@ -6,3 +6,4 @@ with Booking() as bot:
     
     bot.change_currency(currency='JPY')
     #bot.select_place_to_go('New York')
+ 

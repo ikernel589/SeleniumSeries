@@ -1,7 +1,7 @@
 import os
 from selenium import webdriver
 
-os.environ['PATH'] += r"C:/SeleniumDrivers"
+os.environ['PATH'] += r"C:/SeleniumDrivers.exe"
 driver = webdriver.Chrome()
 driver.get("https://www.seleniumeasy.com/test/jquery-download-progress-bar-demo.html")
 driver.implicitly_wait(30)

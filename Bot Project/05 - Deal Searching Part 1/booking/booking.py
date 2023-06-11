@@ -11,7 +11,7 @@ class Booking(webdriver.Chrome):
         os.environ['PATH'] += self.driver_path
         super(Booking, self).__init__()
         self.implicitly_wait(15)
-        #self.maximize_window()
+        self.maximize_window()
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         if self.teardown:
@@ -21,10 +21,15 @@ class Booking(webdriver.Chrome):
         self.get(const.BASE_URL)
 
     def change_currency(self, currency=None):
+        #close ad window
+        gen=self.find_element(By.CSS_SELECTOR,'button[aria-label="Dismiss sign-in info."]') 
+        gen.click()
         currency_element = self.find_element(By.CSS_SELECTOR,'button[data-testid="header-currency-picker-trigger"]')    
         currency_element.click()
 
-        selected_currency_element = self.find_element(By.CSS_SELECTOR,'div > span[text="AUD"]')
+        #selected_currency_element = self.find_element(By.CSS_SELECTOR,f'button > div > div > span + div:contians("{currency}")')
+        selected_currency_element=self.find_element(By.XPATH,f"//button/div/div/span/div[text()='{currency}']")
+        #self.find_element(By.CSS_SELECTOR,'div:contains("JPY")^4')
         selected_currency_element.click()
 
 
