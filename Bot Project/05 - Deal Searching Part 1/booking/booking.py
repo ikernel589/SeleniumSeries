@@ -3,9 +3,13 @@ import os
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
+
+
+
 class Booking(webdriver.Chrome):
     def __init__(self, driver_path=r"C:\SeleniumDrivers",
                  teardown=False):
+        
         self.driver_path = driver_path
         self.teardown = teardown
         os.environ['PATH'] += self.driver_path
