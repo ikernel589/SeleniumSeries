@@ -1,8 +1,9 @@
 from hermes import Hermes
 from constants import Const
 
-with Hermes() as bot:
-    bot.checkdrops('ca')
+#with Hermes(country="us") as bot:
+bot=Hermes("us")
+bot.checkdrops()
 
 """ const=Const()
 for key in const.country:

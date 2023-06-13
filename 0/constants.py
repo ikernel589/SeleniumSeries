@@ -1,10 +1,11 @@
 import os
 import csv
-
 class Const():
     def __init__(self):
         self.driver_path=r"C:\chrome\chromedriver.exe"
-        self.BASE_URL = "https://www.hermes.com/code/en/category/women/bags-and-small-leather-goods/small-leather-goods/"
+        self.output_path=r"C:\chrome\output"
+        self.BASE_URL1 = "https://www.hermes.com/code/en/category/women/bags-and-small-leather-goods/small-leather-goods/#|"
+        self.BASE_URL2 = "https://www.hermes.com/us/en/category/women/bags-and-small-leather-goods/bags-and-clutches/#|"
         self.items=self.load_items()
         self.country=self.load_country()
         
