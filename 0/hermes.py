@@ -14,6 +14,8 @@ from datetime import datetime
 import pytz
 import apprise
 import os
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.action_chains import ActionChains
 
 class Hermes():
     def __init__(self, country="us",driver_path=r"C:\chrome\chromedriver.exe",
@@ -31,9 +33,9 @@ class Hermes():
         if self.teardown:
             self.quit()
     
-    def initchrome(self,country,port):
+    def initchrome(self,port):
         powershell_script=f"{os.path.dirname(os.path.abspath(__file__))}\cleanchrome.ps1"
-        result = subprocess.run(["powershell", "-File", powershell_script, country,str(port)], capture_output=True, text=True)
+        result = subprocess.run(["powershell", "-File", powershell_script, self.country,str(port)], capture_output=True, text=True)
 
         # 檢查執行結果
         if result.returncode == 0:
@@ -67,22 +69,37 @@ class Hermes():
         port=int(self.const.country[self.country.upper()]['port'])+9000
         
         opt=Options()
+        opt.add_experimental_option("debuggerAddress",f"127.0.0.1:{port}")
+        
         try:
-            opt.add_experimental_option("debuggerAddress",f"127.0.0.1:{port}")
+            self.driver=webdriver.Chrome(options=opt)
         except Exception as e:
-            port=int(self.country[country.upper()]['port'])+9000
-            opt.add_experimental_option("debuggerAddress",f"127.0.0.1:{port}")
-            
-        self.driver=webdriver.Chrome(options=opt)
+            self.initchrome(port)
+            self.driver=webdriver.Chrome(options=opt)
+        
         #minimize window?
         url=self.const.BASE_URL1.replace("code",self.country)
+        url2=self.const.BASE_URL2.replace("code",self.country)
+        if len(self.driver.window_handles)==2:
+            self.driver.switch_to.window(self.driver.window_handles[0])
         wait = WebDriverWait(self.driver, 10)
+        
+            
         self.driver.get(url)
         get_url = self.driver.current_url
         wait.until(EC.url_to_be(url))
         if get_url == url:
             page_source = self.driver.page_source
             soup = BeautifulSoup(page_source,features="html.parser")
+        if len(self.driver.window_handles)==2:
+            self.driver.switch_to.window(self.driver.window_handles[1])
+            self.driver.get(url2)
+            get_url = self.driver.current_url
+            wait.until(EC.url_to_be(url))
+            if get_url == url:
+                page_source = self.driver.page_source
+                soup.extend(BeautifulSoup(page_source,features="html.parser"))
+            
         table = PrettyTable()
         table.field_names=["Name","Color","Price","Image"]
 
