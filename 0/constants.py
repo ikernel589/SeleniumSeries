@@ -5,7 +5,7 @@ class Const():
         self.driver_path=r"C:\chrome\chromedriver.exe"
         self.output_path=r"C:\chrome\output"
         self.BASE_URL1 = "https://www.hermes.com/code/en/category/women/bags-and-small-leather-goods/small-leather-goods/#|"
-        self.BASE_URL2 = "https://www.hermes.com/us/en/category/women/bags-and-small-leather-goods/bags-and-clutches/#|"
+        self.BASE_URL0 = "https://www.hermes.com/us/en/category/women/bags-and-small-leather-goods/bags-and-clutches/#|"
         self.items=self.load_items()
         self.country=self.load_country()
         

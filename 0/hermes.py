@@ -72,7 +72,7 @@ class Hermes():
         print("aaa")
         
         
-    def checkdrops(self):
+    def checkdrops(self,page):
         pacific = pytz.timezone('US/Pacific')
         now = datetime.now(pacific).strftime("%Y-%m-%d_%H-%M-%S")
         port=int(self.const.country[self.country.upper()]['port'])+9000
@@ -87,10 +87,13 @@ class Hermes():
             self.driver=webdriver.Chrome(options=opt)
         
         #minimize window?
-        url=self.const.BASE_URL1.replace("code",self.country)
-        url2=self.const.BASE_URL2.replace("code",self.country)
-        if len(self.driver.window_handles)==2:
-            self.driver.switch_to.window(self.driver.window_handles[0])
+        if page=='0':
+            url=self.const.BASE_URL0.replace("code",self.country)
+        else:
+            url=self.const.BASE_URL1.replace("code",self.country)
+        
+        """ if len(self.driver.window_handles)==2:
+            self.driver.switch_to.window(self.driver.window_handles[0]) """
         wait = WebDriverWait(self.driver, 10)
         
             
@@ -100,14 +103,14 @@ class Hermes():
         if get_url == url:
             page_source = self.driver.page_source
             soup = BeautifulSoup(page_source,features="html.parser")
-        if len(self.driver.window_handles)==2:
+        """ if len(self.driver.window_handles)==2:
             self.driver.switch_to.window(self.driver.window_handles[1])
             self.driver.get(url2)
             get_url = self.driver.current_url
             wait.until(EC.url_to_be(url))
             if get_url == url:
                 page_source = self.driver.page_source
-                soup.extend(BeautifulSoup(page_source,features="html.parser"))
+                soup.extend(BeautifulSoup(page_source,features="html.parser")) """
             
         table = PrettyTable()
         table.field_names=["Name","Color","Price","Image"]

@@ -30,3 +30,13 @@
 
         EU office site. cheapist.
         
+DB install
+https://www.tutorialspoint.com/sqlite/sqlite_installation.htm
+
+
+
+
+setup 
+c:\chrome\data
+c:\chrome\output
+install chrome and download related version chromedriver to c:\chrome\
