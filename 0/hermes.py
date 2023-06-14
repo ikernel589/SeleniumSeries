@@ -62,6 +62,15 @@ class Hermes():
     def printdata(self):
         alert("aa")
         
+    def checkitems(self,pname):
+        for item in self.const.items:
+            if item in pname:
+                return True
+        return False
+    def addtodb(self):
+        #      date, code, weekday, time, pname, color, link, image, duration
+        print("aaa")
+        
         
     def checkdrops(self):
         pacific = pytz.timezone('US/Pacific')
@@ -102,23 +111,29 @@ class Hermes():
             
         table = PrettyTable()
         table.field_names=["Name","Color","Price","Image"]
-
+        found=False
         divs=soup.find_all(class_="product-item")
         for div in divs:
-            href=div.find('a')['href']
             pname=div.find('span', class_='product-item-name').text
-            price=div.find('h-price').text.replace("\n","").strip()
-            color=div.find('span', text='Color').parent.text.replace("\xa0","").replace(",Color:","").strip()
-            pimage=div.find('img')['src']
-            if "data:image" in pimage:
-                pimage=div.find('img')['data-src']
-            table.add_row([pname,color,price,html.escape(f"<a href='https://www.hermes.com{href}'><img height='100' width='100' src='https:{pimage}' alt='{pname}'></a>"),])
+            if self.checkitems(pname):
+                found=True
+                
+                href=div.find('a')['href']
+                price=div.find('h-price').text.replace("\n","").strip()
+                color=div.find('span', text='Color').parent.text.replace("\xa0","").replace(",Color:","").strip()
+                pimage=div.find('img')['src']
+                if "data:image" in pimage:
+                    pimage=div.find('img')['data-src']
+                # check if requested by a memeber
+                link=f"<img height='100' width='100' src='https:{pimage}' alt='{pname}'>"
+                memberlink=f"<a href='https://www.hermes.com{href}'><img height='100' width='100' src='https:{pimage}' alt='{pname}'></a>"
+                table.add_row([pname,color,price,html.escape(memberlink),])
            
         table.align["Name"] = "l"
         table.align["Color"] = "c"
         table.align["Price"] = "r"
         table.align["Image"] = "r"
-        table.sortby = "Name"
+        table.sortby = "Price"
 
         css_style = '''
         <style>
@@ -140,7 +155,10 @@ class Hermes():
         strhtml=f"{css_style}{table.get_html_string()}"
         #strhtml=html.escape(strhtml)
         strhtml=strhtml.replace("&amp;lt;","<").replace("&amp;gt;",">").replace("&amp;","&").replace("&#x27;","'").replace("&amp;","&") 
-        self.send_email_notification("chenshouhsien@gmail.com",f"Hermes bag dropped in {self.country}!",strhtml)
-        filename = f"{self.const.output_path}\{self.country}\\found-{now}.html"
-        with open(filename, 'w') as file:
-            file.write(strhtml)
+        if found:
+            self.send_email_notification("chenshouhsien@gmail.com",f"Hermes bag dropped in {self.country}!",strhtml)
+            filename = f"{self.const.output_path}\{self.country}\\found-{now}.html"
+            #output notice html
+            with open(filename, 'w') as file:
+                file.write(strhtml)
+            
