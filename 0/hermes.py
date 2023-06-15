@@ -60,7 +60,7 @@ class Hermes():
             body_format=apprise.NotifyFormat.HTML
         )
     def printdata(self):
-        alert("aa")
+        print("aa")
         
     def checkitems(self,pname):
         for item in self.const.items:
